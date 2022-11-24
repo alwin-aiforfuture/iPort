@@ -30,10 +30,10 @@ namespace iPort {
      * iPort digitalWrite
      */
     //% blockId=Digital write
-    //% block="digitalWrite $address at $pin"
+    //% block="iPort digital write to board $address with pin $pin to $pin_state"
     //% address.min=0 address.max=20
-    //% pin.min=0 pin.max=100
-    export function digitalWrite(address: number, pin: GPIO): void {
+    //% pin_state.min=0 pin_state.max=1
+    export function digitalWrite(address: number, pin: GPIO, pin_state:number): void {
         // return 10 * pin
     }
 }
