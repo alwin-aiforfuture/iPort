@@ -124,7 +124,7 @@ namespace iPort {
         LASER_2 = 15
     }
     export enum PCA9635_RGB_PIN {
-        //% block="LED SMD 1"
+        //% block="SMD \LED \1"
         LED_SMD_1 = 0x01,
 
         //% block="LED SMD 2"
