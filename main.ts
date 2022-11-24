@@ -108,16 +108,16 @@ namespace iPort {
         SET_PWM = 0x91
     }
     export enum RGB_LED_PIN {
-        //% block="LED SMD 1"
+        //% block="SMD LED 1"
         LED_SMD_1 = 0x01,
 
-        //% block="LED SMD 2"
+        //% block="SMD LED 2"
         LED_SMD_2 = 0x02,
 
-        //% block="LED THT 1"
+        //% block="THT LED 1"
         LED_1 = 0x03,
 
-        //% block="LED THT 2"
+        //% block="THT LED 2"
         LED_2 = 0x04
     }
 
