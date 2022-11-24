@@ -86,6 +86,13 @@ namespace iPort {
 
     }
 
+    const CMD_SERVO = 0x05
+    export enum SERVO {
+        ANGLE = 0x50,
+        TARGET_US = 0x51
+    }
+
+
     const CMD_SEVEN_SEGMENT = 0x06
     export enum SEVEN_SEG {
         CLEAR = 0x60,
@@ -246,6 +253,29 @@ namespace iPort {
         control.waitMicros(DELAY)
         return value
     }
+
+    /* Servo *************************************************************************************************************************/
+    /**
+     * iPort 7-seg dispaly clear
+     */
+    //% blockId=servoAngle
+    //% block="iPort #$address set servo $servo_num to $angle"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="Servo" blockGap=10
+    export function servoAngle(address: number, servo_num: number, angle: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x8, address, CMD_SERVO, SERVO.ANGLE, servo_num, angle]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        i2c_receive_0_byte(address, checksum, "0x51")
+    }
+
+
 
     /* 7-seg dispaly *************************************************************************************************************************/
     /**
