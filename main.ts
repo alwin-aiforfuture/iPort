@@ -163,7 +163,7 @@ namespace iPort {
     //% block="iPort clear display to board $address"
     //% address.min=0 address.max=20 address.defl=10
     //% group="7-seg dispaly" blockGap=10
-    function sevenSegment_Clear(address: number) {
+    export function sevenSegment_Clear(address: number) {
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_SEVEN_SEGMENT, SEVEN_SEG.CLEAR]
         let checksum = getChecksum(cmd)
         cmd.push(checksum)
