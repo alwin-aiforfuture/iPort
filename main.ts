@@ -114,10 +114,10 @@ namespace iPort {
         //% block="LED SMD 2"
         LED_SMD_2 = 0x02,
 
-        //% block="LED 1"
+        //% block="LED THT 1"
         LED_1 = 0x03,
 
-        //% block="LED 2"
+        //% block="LED THT 2"
         LED_2 = 0x04
     }
 
