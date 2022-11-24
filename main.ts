@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO","7-seg dispaly", "LED"]'
+//% groups='["GPIO","7-seg dispaly"]'
 
 namespace iPort {
     const DELAY = 50
@@ -421,7 +421,5 @@ namespace iPort {
 
         i2c_receive_0_byte(address, checksum, "0x63");
     }
-
-    /* LED *************************************************************************************************************************/
 
 }
