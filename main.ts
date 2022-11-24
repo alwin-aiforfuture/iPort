@@ -403,7 +403,7 @@ namespace iPort {
         pins.i2cWriteBuffer(address, cmd_buf)
         control.waitMicros(800)
 
-        i2c_receive_0_byte(address, checksum, "0x63");
+        i2c_receive_0_byte(address, checksum, "0x63")
     }
 
     /* LED *************************************************************************************************************************/
@@ -427,6 +427,21 @@ namespace iPort {
         pins.i2cWriteBuffer(address, cmd_buf)
         control.waitMicros(2000)
 
-        i2c_receive_0_byte(address, checksum, "0x90");
+        i2c_receive_0_byte(address, checksum, "0x90")
+    }
+
+    /**
+    * iPort set lights to selected color
+    */
+    //% block="iPort #$address set LED $pin with $color"
+    //% address.min=0 address.max=20 address.defl=10
+    //% color.shadow="colorNumberPicker"
+    //% group="LED" blockGap=10
+    export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
+        let r = Math.round(((color >> 16) & 0xFF) * 4095 / 255)
+        let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
+        let b = Math.round(((color) & 0xFF) * 4095 / 255)
+
+        PCA9635_setRGB(address, pin, r, g, b)
     }
 }
