@@ -433,24 +433,14 @@ namespace iPort {
     /**
     * iPort set lights to selected color
     */
-    //% block="iPort #$address set LED $pin with $color"
+    //% block="!iPort #$address set LED $pin with $color"
     //% address.min=0 address.max=20 address.defl=10
     //% color.shadow="colorNumberPicker"
     //% group="LED" blockGap=10
-    export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
+    // export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
         let r = Math.round(((color >> 16) & 0xFF) * 4095 / 255)
         let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
         let b = Math.round(((color) & 0xFF) * 4095 / 255)
 
-        let cmd: number[] = [START_BYTE_SEND, 0xA, address, CMD_PCA9635, PCA9635.SET_RGB, pin, r, g, b]
-        let checksum = getChecksum(cmd)
-        cmd.push(checksum)
-        cmd = standardArrayLen(cmd)
-
-        let cmd_buf = pins.createBufferFromArray(cmd)
-        pins.i2cWriteBuffer(address, cmd_buf)
-        control.waitMicros(2000)
-
-        i2c_receive_0_byte(address, checksum, "0x90")
     }
 }
