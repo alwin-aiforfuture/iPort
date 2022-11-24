@@ -281,7 +281,7 @@ namespace iPort {
      * iPort set servo us
      */
     //% blockId=servoTargetUS
-    //% block="iPort #$address set servo $servo_num to $angle (us)"
+    //% block="iPort #$address set servo $servo_num to $target_us (us)"
     //% address.min=0 address.max=20 address.defl=10
     //% servo_num.min=1 servo_num.max=8 servo_num.defl=1
     //% target_us.min=500 target_us.max=2500 target_us.defl=500
