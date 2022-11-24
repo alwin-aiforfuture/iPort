@@ -442,6 +442,15 @@ namespace iPort {
         let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
         let b = Math.round(((color) & 0xFF) * 4095 / 255)
 
-        PCA9635_setRGB(address, pin, r, g, b)
+        let cmd: number[] = [START_BYTE_SEND, 0xA, address, CMD_PCA9635, PCA9635.SET_RGB, pin, r, g, b]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(2000)
+
+        i2c_receive_0_byte(address, checksum, "0x90")
     }
 }
