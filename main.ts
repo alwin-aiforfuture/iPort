@@ -92,6 +92,7 @@ namespace iPort {
         TARGET_US = 0x51
     }
 
+
     const CMD_SEVEN_SEGMENT = 0x06
     export enum SEVEN_SEG {
         CLEAR = 0x60,
@@ -99,42 +100,6 @@ namespace iPort {
         SET_BRIGHTNESS = 0x62,
         ALL_ON = 0x63,
         SET_SIGNED_NUM = 0x64
-    }
-
-    const CMD_PCA9635 = 0x09
-    export enum PCA9635 {
-        SET_RGB = 0x90,
-        SET_PWM = 0x91,
-
-        LED_SMD_1_R = 0,
-        LED_SMD_1_G = 1,
-        LED_SMD_1_B = 2,
-        LED_SMD_2_R = 3,
-        LED_SMD_2_G = 4,
-        LED_SMD_2_B = 5,
-        LED_THT_1_R = 6,
-        LED_THT_1_G = 7,
-        LED_THT_1_B = 8,
-        LED_THT_2_R = 9,
-        LED_THT_2_G = 10,
-        LED_THT_2_B = 11,
-        COLOR_LED_1 = 12,
-        COLOR_LED_2 = 13,
-        LASER_1 = 14,
-        LASER_2 = 15
-    }
-    export enum PCA9635_RGB_PIN {
-        //% block="SMD \LED \1"
-        LED_SMD_1 = 0x01,
-
-        //% block="LED SMD 2"
-        LED_SMD_2 = 0x02,
-
-        //% block="LED 1"
-        LED_1 = 0x03,
-
-        //% block="LED 2"
-        LED_2 = 0x04,
     }
 
     function print_error_screen(msg: string) {
@@ -421,5 +386,4 @@ namespace iPort {
 
         i2c_receive_0_byte(address, checksum, "0x63");
     }
-
 }
