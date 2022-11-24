@@ -256,12 +256,13 @@ namespace iPort {
 
     /* Servo *************************************************************************************************************************/
     /**
-     * iPort 7-seg dispaly clear
+     * iPort set servo angle
      */
     //% blockId=servoAngle
     //% block="iPort #$address set servo $servo_num to $angle"
     //% address.min=0 address.max=20 address.defl=10
     //% servo_num.min=1 servo_num.max=8 servo_num.defl=1
+    //% angle.min=0 angle.max=180 angle.defl=0
     //% group="Servo" blockGap=10
     export function servoAngle(address: number, servo_num: number, angle: number) {
         let cmd: number[] = [START_BYTE_SEND, 0x8, address, CMD_SERVO, SERVO.ANGLE, servo_num, angle]
@@ -276,6 +277,29 @@ namespace iPort {
         i2c_receive_0_byte(address, checksum, "0x51")
     }
 
+    /**
+     * iPort set servo us
+     */
+    //% blockId=servoTargetUS
+    //% block="iPort #$address set servo $servo_num to $angle (us)"
+    //% address.min=0 address.max=20 address.defl=10
+    //% servo_num.min=1 servo_num.max=8 servo_num.defl=1
+    //% target_us.min=500 target_us.max=2500 target_us.defl=500
+    //% group="Servo" blockGap=10
+    export function servoTargetUS(address: number, servo_num: number, target_us: number) {
+        let target_us_MSB = (target_us & 0b1111111100000000) >> 8;
+        let target_us_LSB = (target_us & 0b0000000011111111);
+        let cmd: number[] = [START_BYTE_SEND, 0x9, address, CMD_SERVO, SERVO.TARGET_US, servo_num, target_us_MSB, target_us_LSB]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        i2c_receive_0_byte(address, checksum, "0x52")
+    }
 
 
     /* 7-seg dispaly *************************************************************************************************************************/
