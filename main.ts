@@ -1,4 +1,4 @@
-//% color="#ff3e30" weight=20 icon="\uf890" block="iPort"
+//% color="#ff3e30" weight=20 icon="\uf11b" block="iPort"
 //% groups='["GPIO","7-seg dispaly"]'
 
 namespace iPort {
