@@ -219,4 +219,24 @@ namespace iPort {
 
         i2c_receive_0_byte(address, checksum, "0x61");
     }
+
+    /**
+     * iPort 7-seg dispaly all on
+     */
+    //% blockId=sevenSegment_AllOn
+    //% block="iPort #$address display all on"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="7-seg dispaly" blockGap=10
+    export function sevenSegment_AllOn(address: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_SEVEN_SEGMENT, SEVEN_SEG.ALL_ON]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(800)
+
+        i2c_receive_0_byte(address, checksum, "0x63");
+    }
 }
