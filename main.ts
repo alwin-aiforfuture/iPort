@@ -423,26 +423,26 @@ namespace iPort {
     }
 
     /* LED *************************************************************************************************************************/
-    /**
-     * iPort set RGB LED
-     */
-    //% blockId=PCA9635_setRGB
-    //% block="iPort #$address set RGB LED $pin r $r g $g b $b"
-    //% address.min=0 address.max=20 address.defl=10
-    //% r.min=0 r.max=255 r.defl=128
-    //% g.min=0 g.max=255 g.defl=128
-    //% b.min=0 b.max=255 b.defl=128
-    //% group="LED" blockGap=10
-    export function PCA9635_setRGB(address: number, pin: PCA9635_RGB_PIN, r: number, g: number, b: number) {
-        let cmd: number[] = [START_BYTE_SEND, 0xA, address, CMD_PCA9635, PCA9635.SET_RGB, pin, r, g, b]
-        let checksum = getChecksum(cmd)
-        cmd.push(checksum)
-        cmd = standardArrayLen(cmd)
+    // /**
+    //  * iPort set RGB LED
+    //  */
+    // //% blockId=PCA9635_setRGB
+    // //% block="iPort #$address set RGB LED $pin r $r g $g b $b"
+    // //% address.min=0 address.max=20 address.defl=10
+    // //% r.min=0 r.max=255 r.defl=128
+    // //% g.min=0 g.max=255 g.defl=128
+    // //% b.min=0 b.max=255 b.defl=128
+    // //% group="LED" blockGap=10
+    // export function PCA9635_setRGB(address: number, pin: PCA9635_RGB_PIN, r: number, g: number, b: number) {
+    //     let cmd: number[] = [START_BYTE_SEND, 0xA, address, CMD_PCA9635, PCA9635.SET_RGB, pin, r, g, b]
+    //     let checksum = getChecksum(cmd)
+    //     cmd.push(checksum)
+    //     cmd = standardArrayLen(cmd)
 
-        let cmd_buf = pins.createBufferFromArray(cmd)
-        pins.i2cWriteBuffer(address, cmd_buf)
-        control.waitMicros(2000)
+    //     let cmd_buf = pins.createBufferFromArray(cmd)
+    //     pins.i2cWriteBuffer(address, cmd_buf)
+    //     control.waitMicros(2000)
 
-        i2c_receive_0_byte(address, checksum, "0x90");
-    }
+    //     i2c_receive_0_byte(address, checksum, "0x90");
+    // }
 }
