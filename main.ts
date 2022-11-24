@@ -157,7 +157,27 @@ namespace iPort {
 
     /* 7-seg dispaly *************************************************************************************************************************/
     /**
-     * iPort 7-seg dispaly
+     * iPort 7-seg dispaly clear
+     */
+    //% blockId=sevenSegment_Clear
+    //% block="iPort clear display to board $address"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="7-seg dispaly" blockGap=10
+    function sevenSegment_Clear(address: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_SEVEN_SEGMENT, SEVEN_SEG.CLEAR]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(800)
+
+        i2c_receive_0_byte(address, checksum, "0x60");
+    }
+
+    /**
+     * iPort 7-seg dispaly set number
      */
     //% blockId=sevenSegment_SetSignedNumber
     //% block="iPort set display to board $address with number $num"
