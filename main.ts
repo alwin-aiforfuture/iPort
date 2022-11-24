@@ -44,6 +44,15 @@ namespace iPort {
         BUTTON = 28,
     }
 
+    const CMD_SEVEN_SEGMENT = 0x06
+    export enum SEVEN_SEG {
+        CLEAR = 0x60,
+        SET_DEC_NUM = 0x61,
+        SET_BRIGHTNESS = 0x62,
+        ALL_ON = 0x63,
+        SET_SIGNED_NUM = 0x64
+    }
+
     function print_error_screen(msg: string) {
 
         // basic.showString(msg)
@@ -107,7 +116,7 @@ namespace iPort {
      */
     //% blockId=digitalWrite
     //% block="iPort digital write to board $address with pin $pin to $pin_state"
-    //% address.min=0 address.max=20
+    //% address.min=0 address.max=20 address.defl=10
     //% pin_state.min=0 pin_state.max=1 pin_state.defl=0
     export function digitalWrite(address: number, pin: GPIO_OUTPUT, pin_state: number): void {
         /* [Start byte, Command Length, Address, Opcode, Operand[Pin], Operand[State], Checksum] */
@@ -128,7 +137,7 @@ namespace iPort {
      */
     //% blockId=digitalRead
     //% block="iPort digital read from board $address with pin $pin"
-    //% address.min=0 address.max=20
+    //% address.min=0 address.max=20 address.defl=10
     export function digitalRead(address: number, pin: GPIO_INPUT): number {
         // [Start byte, Command Length, Address, Opcode, Operand[Pin], Checksum]
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DIGITAL_READ, pin]
@@ -141,5 +150,27 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         return i2c_receive_1_byte(address, checksum, "0x02")
+    }
+
+    /**
+     * iPort 7-seg dispaly
+     */
+    //% blockId=sevenSegment_SetSignedNumber
+    //% block="iPort set display to board $address with number $num"
+    //% address.min=0 address.max=20 address.defl=10
+    //% num.min=-999 num.max=9999
+    export function sevenSegment_SetSignedNumber(address: number, num: number) {
+        let num_MSB = (num & 0b1111111100000000) >> 8
+        let num_LSB = (num & 0b0000000011111111)
+        let cmd: number[] = [START_BYTE_SEND, 0x8, address, CMD_SEVEN_SEGMENT, SEVEN_SEG.SET_SIGNED_NUM, num_MSB, num_LSB]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(800)
+
+        i2c_receive_0_byte(address, checksum, "0x61");
     }
 }
