@@ -180,7 +180,7 @@ namespace iPort {
      * iPort 7-seg dispaly set brightness
      */
     //% blockId=sevenSegment_SetBrightness
-    //% block="iPort set display brightness to board $address with number $num"
+    //% block="iPort set display brightness to board $address with brightness level $brightness"
     //% address.min=0 address.max=20 address.defl=10
     //% brightness.min=0 brightness.max=7
     //% group="7-seg dispaly" blockGap=10
