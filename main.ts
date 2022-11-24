@@ -119,7 +119,7 @@ namespace iPort {
     //% block="iPort digital write to board $address with pin $pin to $pin_state"
     //% address.min=0 address.max=20 address.defl=10
     //% pin_state.min=0 pin_state.max=1 pin_state.defl=0
-    //% group="GPIO" blockGap=10
+    //% group="GPIO" blockGap=100
     export function digitalWrite(address: number, pin: GPIO_OUTPUT, pin_state: number): void {
         /* [Start byte, Command Length, Address, Opcode, Operand[Pin], Operand[State], Checksum] */
         let cmd: number[] = [START_BYTE_SEND, 0x7, address, CMD_DIGITAL_WRITE, pin, pin_state]
