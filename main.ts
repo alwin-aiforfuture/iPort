@@ -7,9 +7,11 @@ namespace iPort {
 
     const REC_LEN_0_BYTE = 4
     const REC_LEN_1_BYTE = 5
+    const REC_LEN_4_BYTE = 8
+    const REC_LEN_ANALOG_READ = 6
 
     const CMD_DIGITAL_WRITE = 0x01
-    export enum GPIO_OUTPUT {
+    export enum GPIO_OUTPUT_PIN {
         //% block="Active buzzer"
         ACTIVE_BUZZER = 11,
 
@@ -18,7 +20,7 @@ namespace iPort {
     }
 
     const CMD_DIGITAL_READ = 0x02
-    export enum GPIO_INPUT {
+    export enum GPIO_INPUT_PIN {
         //% block="Joystick switch"
         JOYSTICK_SW = 21,
 
@@ -42,6 +44,43 @@ namespace iPort {
 
         //% block="Button"
         BUTTON = 28,
+    }
+
+    const CMD_ANALOG_READ = 0x04
+    export enum ADC_PIN {
+        //% block="Joystick X"
+        JOYSTICK_X = 41,
+
+        //% block="Joystick Y"
+        JOYSTICK_Y = 42,
+
+        //% block="Water level"
+        WATER_LEVEL = 43,
+
+        //% block="Flame"
+        FLAME = 44,
+
+        //% block="Hall effect"
+        HALL_EFFECT = 45,
+
+        //% block="Soil humidity"
+        SOIL_HUMIDITY = 46,
+
+        //% block="Analog temp"
+        ANALOG_TEMP = 47,
+
+        //% block="Microphone"
+        MIC = 48,
+
+        //% block="Photoresistor"
+        PHOTORESISTOR = 49,
+
+        //% block="Potentiometer"
+        POTENTIOMETER = 10,
+
+        //% block="Heart rate"
+        HEART_RATE = 11
+
     }
 
     const CMD_SEVEN_SEGMENT = 0x06
@@ -111,6 +150,22 @@ namespace iPort {
         return value
     }
 
+    function i2c_receive_4_byte(address: number, checksum: number, error_code: string) {
+        let rec_cmd_len = REC_LEN_4_BYTE;
+        let rec_cmd_buf = pins.i2cReadBuffer(address, rec_cmd_len, false)
+        let rec_cmd_array = rec_cmd_buf.toArray(NumberFormat.UInt8LE)
+        rec_cmd_array.pop()
+        let rec_checksum = getChecksum(rec_cmd_array)
+        if (rec_cmd_buf[0] != START_BYTE_RECEIVE ||
+            rec_cmd_buf[1] != rec_cmd_len ||
+            rec_cmd_buf[2] != checksum ||
+            rec_cmd_buf[7] != rec_checksum) {
+            print_error_screen(error_code)
+        }
+        let value = rec_cmd_buf[3] << 24 | rec_cmd_buf[4] << 16 | rec_cmd_buf[5] << 8 | rec_cmd_buf[6]
+        return value
+    }
+
     /* GPIO *************************************************************************************************************************/
     /**
      * iPort digitalWrite
@@ -120,7 +175,7 @@ namespace iPort {
     //% address.min=0 address.max=20 address.defl=10
     //% pin_state.min=0 pin_state.max=1 pin_state.defl=0
     //% group="GPIO" blockGap=5
-    export function digitalWrite(address: number, pin: GPIO_OUTPUT, pin_state: number): void {
+    export function digitalWrite(address: number, pin: GPIO_OUTPUT_PIN, pin_state: number): void {
         /* [Start byte, Command Length, Address, Opcode, Operand[Pin], Operand[State], Checksum] */
         let cmd: number[] = [START_BYTE_SEND, 0x7, address, CMD_DIGITAL_WRITE, pin, pin_state]
         let checksum = getChecksum(cmd)
@@ -141,7 +196,7 @@ namespace iPort {
     //% block="iPort digital read from board $address with pin $pin"
     //% address.min=0 address.max=20 address.defl=10
     //% group="GPIO" blockGap=10
-    export function digitalRead(address: number, pin: GPIO_INPUT): number {
+    export function digitalRead(address: number, pin: GPIO_INPUT_PIN): number {
         // [Start byte, Command Length, Address, Opcode, Operand[Pin], Checksum]
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DIGITAL_READ, pin]
         let checksum = getChecksum(cmd)
@@ -153,6 +208,40 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         return i2c_receive_1_byte(address, checksum, "0x02")
+    }
+
+    /**
+     * iPort analogRead
+     */
+    //% blockId=analogRead
+    //% block="iPort #$address analog read $pin"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="GPIO" blockGap=10
+    export function analogRead(address: number, pin: ADC_PIN) {
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ANALOG_READ, pin]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        let rec_cmd_buf = pins.i2cReadBuffer(address, REC_LEN_ANALOG_READ, false)
+        let rec_cmd_array = rec_cmd_buf.toArray(NumberFormat.UInt8LE)
+        rec_cmd_array.pop()
+        let rec_checksum = getChecksum(rec_cmd_array)
+
+        if (rec_cmd_buf[0] != START_BYTE_RECEIVE ||
+            rec_cmd_buf[1] != REC_LEN_ANALOG_READ ||
+            rec_cmd_buf[2] != checksum ||
+            rec_cmd_buf[5] != rec_checksum) {
+            print_error_screen("0x04")
+
+        }
+        let value = rec_cmd_buf[3] << 8 | rec_cmd_buf[4]
+        control.waitMicros(DELAY)
+        return value
     }
 
     /* 7-seg dispaly *************************************************************************************************************************/
