@@ -437,7 +437,7 @@ namespace iPort {
     //% address.min=0 address.max=20 address.defl=10
     //% color.shadow="colorNumberPicker"
     //% group="LED" blockGap=10
-    // export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
+    export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
         let r = Math.round(((color >> 16) & 0xFF) * 4095 / 255)
         let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
         let b = Math.round(((color) & 0xFF) * 4095 / 255)
