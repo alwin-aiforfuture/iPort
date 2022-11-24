@@ -177,6 +177,27 @@ namespace iPort {
     }
 
     /**
+     * iPort 7-seg dispaly set brightness
+     */
+    //% blockId=sevenSegment_SetBrightness
+    //% block="iPort set display brightness to board $address with number $num"
+    //% address.min=0 address.max=20 address.defl=10
+    //% brightness.min=0 brightness.max=7
+    //% group="7-seg dispaly" blockGap=10
+    export function sevenSegment_SetBrightness(address: number, brightness: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x7, address, CMD_SEVEN_SEGMENT, SEVEN_SEG.SET_BRIGHTNESS, brightness]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(800)
+
+        i2c_receive_0_byte(address, checksum, "0x62");
+    }
+
+    /**
      * iPort 7-seg dispaly set number
      */
     //% blockId=sevenSegment_SetSignedNumber
