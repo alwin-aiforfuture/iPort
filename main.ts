@@ -261,6 +261,7 @@ namespace iPort {
     //% blockId=servoAngle
     //% block="iPort #$address set servo $servo_num to $angle"
     //% address.min=0 address.max=20 address.defl=10
+    //% servo_num.min=1 servo_num.max=8 servo_num.defl=1
     //% group="Servo" blockGap=10
     export function servoAngle(address: number, servo_num: number, angle: number) {
         let cmd: number[] = [START_BYTE_SEND, 0x8, address, CMD_SERVO, SERVO.ANGLE, servo_num, angle]
