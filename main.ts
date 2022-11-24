@@ -119,6 +119,7 @@ namespace iPort {
     //% block="iPort digital write to board $address with pin $pin to $pin_state"
     //% address.min=0 address.max=20 address.defl=10
     //% pin_state.min=0 pin_state.max=1 pin_state.defl=0
+    //% group="GPIO" blockGap=10
     export function digitalWrite(address: number, pin: GPIO_OUTPUT, pin_state: number): void {
         /* [Start byte, Command Length, Address, Opcode, Operand[Pin], Operand[State], Checksum] */
         let cmd: number[] = [START_BYTE_SEND, 0x7, address, CMD_DIGITAL_WRITE, pin, pin_state]
@@ -139,6 +140,7 @@ namespace iPort {
     //% blockId=digitalRead
     //% block="iPort digital read from board $address with pin $pin"
     //% address.min=0 address.max=20 address.defl=10
+    //% group="GPIO" blockGap=10
     export function digitalRead(address: number, pin: GPIO_INPUT): number {
         // [Start byte, Command Length, Address, Opcode, Operand[Pin], Checksum]
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DIGITAL_READ, pin]
@@ -161,6 +163,7 @@ namespace iPort {
     //% block="iPort set display to board $address with number $num"
     //% address.min=0 address.max=20 address.defl=10
     //% num.min=-999 num.max=9999
+    //% group="7-seg dispaly" blockGap=10
     export function sevenSegment_SetSignedNumber(address: number, num: number) {
         let num_MSB = (num & 0b1111111100000000) >> 8
         let num_LSB = (num & 0b0000000011111111)
