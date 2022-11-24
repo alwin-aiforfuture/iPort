@@ -1,3 +1,6 @@
+//% color="#022169" weight=20 icon="\uf1b9" block="iPort"
+//% groups='["GPIO","7-seg dispaly"]'
+
 namespace iPort {
     const DELAY = 50
 
