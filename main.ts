@@ -126,9 +126,9 @@ namespace iPort {
         // basic.showString(msg)
         basic.pause(500)
 
-        while (1) {
-            basic.showString(msg)
-        }
+        // while (1) {
+        //     basic.showString(msg)
+        // }
     }
 
     function getChecksum(cmd: number[]) {
