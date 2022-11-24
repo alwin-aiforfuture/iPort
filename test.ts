@@ -1,1 +1,1 @@
-iPort.digitalWrite(10, iPort.GPIO.JOYSTICK_SW)
+iPort.digitalWrite(10, iPort.GPIO.JOYSTICK_SW, 1)
