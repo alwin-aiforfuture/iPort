@@ -5,7 +5,8 @@ namespace iPort {
     const START_BYTE_SEND = 0xAB
     const START_BYTE_RECEIVE = 0xCD
 
-    const REC_LEN_COMMON = 4
+    const REC_LEN_0_BYTE = 4
+    const REC_LEN_1_BYTE = 5
 
     const CMD_DIGITAL_WRITE = 0x01
     export enum GPIO_OUTPUT {
@@ -16,6 +17,7 @@ namespace iPort {
         RELAY = 12
     }
 
+    const CMD_DIGITAL_READ = 0x02
     export enum GPIO_INPUT {
         //% block="Joystick switch"
         JOYSTICK_SW = 21,
@@ -70,8 +72,8 @@ namespace iPort {
     }
 
 
-    function i2c_receive_common(address: number, checksum: number, error_code: string) {
-        let rec_cmd_len = REC_LEN_COMMON;
+    function i2c_receive_0_byte(address: number, checksum: number, error_code: string) {
+        let rec_cmd_len = REC_LEN_0_BYTE;
         let rec_cmd_buf = pins.i2cReadBuffer(address, rec_cmd_len, false)
         let rec_cmd_array = rec_cmd_buf.toArray(NumberFormat.UInt8LE)
         rec_cmd_array.pop()
@@ -82,6 +84,22 @@ namespace iPort {
             rec_cmd_buf[3] != rec_checksum) {
             print_error_screen(error_code)
         }
+    }
+
+    function i2c_receive_1_byte(address: number, checksum: number, error_code: string) {
+        let rec_cmd_len = REC_LEN_1_BYTE;
+        let rec_cmd_buf = pins.i2cReadBuffer(address, rec_cmd_len, false)
+        let rec_cmd_array = rec_cmd_buf.toArray(NumberFormat.UInt8LE)
+        rec_cmd_array.pop()
+        let rec_checksum = getChecksum(rec_cmd_array)
+        if (rec_cmd_buf[0] != START_BYTE_RECEIVE ||
+            rec_cmd_buf[1] != rec_cmd_len ||
+            rec_cmd_buf[2] != checksum ||
+            rec_cmd_buf[4] != rec_checksum) {
+            print_error_screen(error_code)
+        }
+        let value = rec_cmd_buf[3]
+        return value
     }
 
     /**
@@ -102,6 +120,26 @@ namespace iPort {
         pins.i2cWriteBuffer(address, cmd_buf)
         control.waitMicros(DELAY)
 
-        i2c_receive_common(address, checksum, "0x01")
+        i2c_receive_0_byte(address, checksum, "0x01")
+    }
+
+    /**
+     * iPort digitalRead
+     */
+    //% blockId=Digital read
+    //% block="iPort digital read from board $address with pin $pin"
+    //% address.min=0 address.max=20
+    export function digitalRead(address: number, pin: GPIO_INPUT): number {
+        // [Start byte, Command Length, Address, Opcode, Operand[Pin], Checksum]
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DIGITAL_READ, pin]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        return i2c_receive_1_byte(address, checksum, "0x02")
     }
 }
