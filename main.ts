@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO","7-seg dispaly"]'
+//% groups='["GPIO","7-seg dispaly", "LED"]'
 
 namespace iPort {
     const DELAY = 50
@@ -424,7 +424,7 @@ namespace iPort {
 
     /* LED *************************************************************************************************************************/
     /**
-     * iPort 7-seg dispaly clear
+     * iPort set RGB LED
      */
     //% blockId=PCA9635_setRGB
     //% block="iPort #$address set RGB LED $pin r $r g $g b $b"
@@ -432,7 +432,7 @@ namespace iPort {
     //% r.min=0 r.max=255 r.defl=128
     //% g.min=0 g.max=255 g.defl=128
     //% b.min=0 b.max=255 b.defl=128
-    //% group="7-seg dispaly" blockGap=10
+    //% group="LED" blockGap=10
     export function PCA9635_setRGB(address: number, pin: PCA9635_RGB_PIN, r: number, g: number, b: number) {
         let cmd: number[] = [START_BYTE_SEND, 0xA, address, CMD_PCA9635, PCA9635.SET_RGB, pin, r, g, b]
         let checksum = getChecksum(cmd)
