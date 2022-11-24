@@ -160,7 +160,7 @@ namespace iPort {
      * iPort 7-seg dispaly clear
      */
     //% blockId=sevenSegment_Clear
-    //% block="iPort clear display to board $address"
+    //% block="iPort #$address clear display"
     //% address.min=0 address.max=20 address.defl=10
     //% group="7-seg dispaly" blockGap=10
     export function sevenSegment_Clear(address: number) {
@@ -180,7 +180,7 @@ namespace iPort {
      * iPort 7-seg dispaly set brightness
      */
     //% blockId=sevenSegment_SetBrightness
-    //% block="iPort set display brightness to board $address with brightness level $brightness"
+    //% block="iPort #$address set brightness $num"
     //% address.min=0 address.max=20 address.defl=10
     //% brightness.min=0 brightness.max=7
     //% group="7-seg dispaly" blockGap=10
