@@ -201,7 +201,7 @@ namespace iPort {
      * iPort 7-seg dispaly set number
      */
     //% blockId=sevenSegment_SetSignedNumber
-    //% block="iPort set display to board $address with number $num"
+    //% block="iPort $address display number $num"
     //% address.min=0 address.max=20 address.defl=10
     //% num.min=-999 num.max=9999
     //% group="7-seg dispaly" blockGap=10
