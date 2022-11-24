@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO","7-seg dispaly"]'
+//% groups='["GPIO", "7-seg dispaly", "LED"]'
 
 namespace iPort {
     const DELAY = 50
@@ -100,6 +100,25 @@ namespace iPort {
         SET_BRIGHTNESS = 0x62,
         ALL_ON = 0x63,
         SET_SIGNED_NUM = 0x64
+    }
+
+    const CMD_PCA9635 = 0x09
+    export enum PCA9635 {
+        SET_RGB = 0x90,
+        SET_PWM = 0x91
+    }
+    export enum RGB_LED_PIN {
+        //% block="LED SMD 1"
+        LED_SMD_1 = 0x01,
+
+        //% block="LED SMD 2"
+        LED_SMD_2 = 0x02,
+
+        //% block="LED 1"
+        LED_1 = 0x03,
+
+        //% block="LED 2"
+        LED_2 = 0x04
     }
 
     function print_error_screen(msg: string) {
@@ -385,5 +404,29 @@ namespace iPort {
         control.waitMicros(800)
 
         i2c_receive_0_byte(address, checksum, "0x63");
+    }
+
+    /* LED *************************************************************************************************************************/
+    /**
+     * iPort 7-seg dispaly clear
+     */
+    //% blockId=sevenSegment_Clear
+    //% block="iPort #$address set LED $pin r $r g $g b $b"
+    //% address.min=0 address.max=20 address.defl=10
+    //% r.min=0 r.max=255 r.defl=128
+    //% g.min=0 g.max=255 g.defl=128
+    //% b.min=0 b.max=255 b.defl=128
+    //% group="LED" blockGap=10
+    export function PCA9635_setRGB(address: number, pin: RGB_LED_PIN, r: number, g: number, b: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0xA, address, CMD_PCA9635, PCA9635.SET_RGB, pin, r, g, b]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(2000)
+
+        i2c_receive_0_byte(address, checksum, "0x90");
     }
 }
