@@ -408,9 +408,9 @@ namespace iPort {
 
     /* LED *************************************************************************************************************************/
     /**
-     * iPort 7-seg dispaly clear
+     * PCA9635_setRGB
      */
-    //% blockId=sevenSegment_Clear
+    //% blockId=PCA9635_setRGB
     //% block="iPort #$address set LED $pin r $r g $g b $b"
     //% address.min=0 address.max=20 address.defl=10
     //% r.min=0 r.max=255 r.defl=128
