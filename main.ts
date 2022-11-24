@@ -200,7 +200,7 @@ namespace iPort {
      * iPort digitalWrite
      */
     //% blockId=digitalWrite
-    //% block="iPort digital write to board $address with pin $pin to $pin_state"
+    //% block="iPort #$address digital write $pin state $pin_state"
     //% address.min=0 address.max=20 address.defl=10
     //% pin_state.min=0 pin_state.max=1 pin_state.defl=0
     //% group="GPIO" blockGap=5
@@ -222,7 +222,7 @@ namespace iPort {
      * iPort digitalRead
      */
     //% blockId=digitalRead
-    //% block="iPort digital read from board $address with pin $pin"
+    //% block="iPort #$address digital read $pin"
     //% address.min=0 address.max=20 address.defl=10
     //% group="GPIO" blockGap=10
     export function digitalRead(address: number, pin: GPIO_INPUT_PIN): number {
