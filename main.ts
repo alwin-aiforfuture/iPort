@@ -24,7 +24,7 @@ namespace iPort {
 
     const CMD_DIGITAL_READ = 0x02
     export enum GPIO_INPUT_PIN {
-        //% block="Joystick switch"
+        //% block="Joystick button"
         JOYSTICK_SW = 21,
 
         //% block="Line follower"
@@ -47,6 +47,9 @@ namespace iPort {
 
         //% block="Button"
         BUTTON = 28,
+
+        //% block="Rotary encoder button"
+        ROTARY_ENCODER = 29
     }
 
     const CMD_ANALOG_READ = 0x04
@@ -515,4 +518,6 @@ namespace iPort {
 
         i2c_receive_0_byte(address, checksum, "0x91");
     }
+
+
 }
