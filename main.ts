@@ -442,5 +442,14 @@ namespace iPort {
         let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
         let b = Math.round(((color) & 0xFF) * 4095 / 255)
 
+        sevenSegment_SetSignedNumber(address, r)
+        basic.pause(3000)
+
+        sevenSegment_SetSignedNumber(address, g)
+        basic.pause(3000)
+
+        sevenSegment_SetSignedNumber(address, b)
+        basic.pause(3000)
+
     }
 }
