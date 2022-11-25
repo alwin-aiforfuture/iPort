@@ -443,6 +443,5 @@ namespace iPort {
         let b = color & 0xFF
 
         PCA9635_setRGB(address, pin, r, g, b)
-
     }
 }
