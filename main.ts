@@ -532,6 +532,9 @@ namespace iPort {
     }
 
     /* Rotary encoder *************************************************************************************************************************/
+    /**
+    * iPort get rotary encoder count
+    */
     //% blockId=RotaryEncoder_getCount
     //% block="iPort #$address get rotary encoder count"
     //% address.min=0 address.max=20 address.defl=10
@@ -552,6 +555,9 @@ namespace iPort {
     }
 
     /* DHT11 *************************************************************************************************************************/
+    /**
+    * iPort update DHT11 
+    */
     function DHT11_update(address: number) {
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DHT11, DHT11.UPDATE]
         let checksum = getChecksum(cmd)
@@ -566,6 +572,9 @@ namespace iPort {
         basic.pause(255)
     }
 
+    /**
+    * iPort get DHT11 temperature
+    */
     //% blockId=DHT11_getTemp
     //% block="iPort #$address get DHT11 temperature"
     //% address.min=0 address.max=20 address.defl=10
@@ -583,5 +592,26 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         return i2c_receive_1_byte(address, checksum, "0x71")
+    }
+
+    /**
+    * iPort get DHT11 humidity
+    */
+    //% blockId=DHT11_getTemp
+    //% block="iPort #$address get DHT11 humidity"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="DHT11" blockGap=10
+    export function DHT11_getHum(address: number) {
+        // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DHT11, DHT11.HUMIDITY]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        return i2c_receive_1_byte(address, checksum, "0x72")
     }
 }
