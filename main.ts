@@ -451,11 +451,12 @@ namespace iPort {
     /**
     * iPort set lights to selected color
     */
+    //% blockId=PCA9635_setColor
     //% block="iPort #$address set LED $pin color $color"
     //% address.min=0 address.max=20 address.defl=10
     //% color.shadow="colorNumberPicker"
     //% group="LED" blockGap=10
-    export function setHeadColor(address: number, pin: PCA9635_RGB_PIN, color: number) {
+    export function PCA9635_setColor(address: number, pin: PCA9635_RGB_PIN, color: number) {
         let r = color >> 16
         let g = (color & 0xFF00) >> 8
         let b = color & 0xFF
@@ -466,6 +467,7 @@ namespace iPort {
     /**
     * iPort set pwm
     */
+    //% blockId=PCA9635_setPWM
     //% block="iPort #$address set LED $pin value $value"
     //% address.min=0 address.max=20 address.defl=10
     //% value.min=0 value.max=255 value.defl=128
