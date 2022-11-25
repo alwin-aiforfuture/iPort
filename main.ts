@@ -597,7 +597,7 @@ namespace iPort {
     /**
     * iPort get DHT11 humidity
     */
-    //% blockId=DHT11_getTemp
+    //% blockId=DHT11_getHum
     //% block="iPort #$address get DHT11 humidity"
     //% address.min=0 address.max=20 address.defl=10
     //% group="DHT11" blockGap=10
