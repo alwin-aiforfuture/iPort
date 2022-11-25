@@ -433,15 +433,11 @@ namespace iPort {
     /**
     * iPort set lights to selected color
     */
-    //% block="(error)iPort #$address set LED $pin with $color"
+    //% block="iPort #$address set LED $pin with $color"
     //% address.min=0 address.max=20 address.defl=10
     //% color.shadow="colorNumberPicker"
     //% group="LED" blockGap=10
     export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
-        // let r = Math.round(((color >> 16) & 0xFF) * 4095 / 255)
-        // let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
-        // let b = Math.round(((color) & 0xFF) * 4095 / 255)
-
         let r = color >> 16
         let g = (color & 0xFF00) >> 8
         let b = color & 0xFF
