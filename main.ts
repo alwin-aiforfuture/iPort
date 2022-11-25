@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder"]'
+//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder", "DHT11"]'
 
 namespace iPort {
     const DELAY = 50
@@ -555,7 +555,7 @@ namespace iPort {
     //% blockId=DHT11_getTemp
     //% block="iPort #$address get DHT11 temperature"
     //% address.min=0 address.max=20 address.defl=10
-    //% group="Rotary encoder" blockGap=10
+    //% group="DHT11" blockGap=10
     export function DHT11_getTemp(address: number) {
         // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DHT11, DHT11.TEMPERATURE]
