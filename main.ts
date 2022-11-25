@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO", "7-seg dispaly", "LED"]'
+//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder"]'
 
 namespace iPort {
     const DELAY = 50
@@ -95,7 +95,6 @@ namespace iPort {
         TARGET_US = 0x51
     }
 
-
     const CMD_SEVEN_SEGMENT = 0x06
     export enum SEVEN_SEG {
         CLEAR = 0x60,
@@ -172,6 +171,12 @@ namespace iPort {
         //% block="Laser 2"
         LASER_2 = 15
     }
+
+    const CMD_ROTARY_ENCODER = 0x0B
+    export enum ROTARY_ENCODER {
+        GET_COUNT = 0xB0
+    }
+
 
     function print_error_screen(msg: string) {
 
@@ -519,5 +524,23 @@ namespace iPort {
         i2c_receive_0_byte(address, checksum, "0x91");
     }
 
+    /* Rotary encoder *************************************************************************************************************************/
+    //% blockId=RotaryEncoder_getCount
+    //% block="iPort #$address get rotary encoder count"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="Rotary encoder" blockGap=10
+    export function RotaryEncoder_getCount(address: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ROTARY_ENCODER, ROTARY_ENCODER.GET_COUNT]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
 
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        
+        let buf = i2c_receive_4_byte(address, checksum, "0xB0")
+        let count = (buf | 0xFFFF0000) >> 16
+
+        return buf
+    }
 }
