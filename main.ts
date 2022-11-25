@@ -433,7 +433,7 @@ namespace iPort {
     /**
     * iPort set lights to selected color
     */
-    //% block="iPort #$address set LED $pin with $color"
+    //% block="iPort #$address set LED $pin color $color"
     //% address.min=0 address.max=20 address.defl=10
     //% color.shadow="colorNumberPicker"
     //% group="LED" blockGap=10
