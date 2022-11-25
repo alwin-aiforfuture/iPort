@@ -438,9 +438,13 @@ namespace iPort {
     //% color.shadow="colorNumberPicker"
     //% group="LED" blockGap=10
     export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
-        let r = Math.round(((color >> 16) & 0xFF) * 4095 / 255)
-        let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
-        let b = Math.round(((color) & 0xFF) * 4095 / 255)
+        // let r = Math.round(((color >> 16) & 0xFF) * 4095 / 255)
+        // let g = Math.round(((color >> 8) & 0xFF) * 4095 / 255)
+        // let b = Math.round(((color) & 0xFF) * 4095 / 255)
+
+        let r = color >> 16
+        let g = color >> 8
+        let b = color
 
         sevenSegment_SetSignedNumber(address, r)
         basic.pause(3000)
