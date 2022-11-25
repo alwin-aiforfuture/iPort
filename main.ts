@@ -446,14 +446,7 @@ namespace iPort {
         let g = (color & 0xFF00) >> 8
         let b = color & 0xFF
 
-        sevenSegment_SetSignedNumber(address, r)
-        basic.pause(3000)
-
-        sevenSegment_SetSignedNumber(address, g)
-        basic.pause(3000)
-
-        sevenSegment_SetSignedNumber(address, b)
-        basic.pause(3000)
+        PCA9635_setRGB(address, pin, r, g, b)
 
     }
 }
