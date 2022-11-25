@@ -121,21 +121,52 @@ namespace iPort {
         LED_2 = 0x04
     }
     export enum PCA9635_PIN {
+        //% block="SMD LED 1 R"
         LED_SMD_1_R = 0,
+
+        //% block="SMD LED 1 G"
         LED_SMD_1_G = 1,
+
+        //% block="SMD LED 1 B"
         LED_SMD_1_B = 2,
+
+        //% block="SMD LED 2 R"
         LED_SMD_2_R = 3,
+
+        //% block="SMD LED 2 G"
         LED_SMD_2_G = 4,
+
+        //% block="SMD LED 2 B"
         LED_SMD_2_B = 5,
+
+        //% block="THT LED 1 R"
         LED_THT_1_R = 6,
+
+        //% block="THT LED 1 G"
         LED_THT_1_G = 7,
+
+        //% block="THT LED 1 B"
         LED_THT_1_B = 8,
+
+        //% block="THT LED 2 R"
         LED_THT_2_R = 9,
+
+        //% block="THT LED 2 G"
         LED_THT_2_G = 10,
+
+        //% block="THT LED 2 B"
         LED_THT_2_B = 11,
+
+        //% block="Color LED 1"
         COLOR_LED_1 = 12,
+
+        //% block="Color LED 2"
         COLOR_LED_2 = 13,
+
+        //% block="Laser 1"
         LASER_1 = 14,
+
+        //% block="Laser 2"
         LASER_2 = 15
     }
 
