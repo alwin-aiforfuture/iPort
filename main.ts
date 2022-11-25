@@ -107,7 +107,7 @@ namespace iPort {
         SET_RGB = 0x90,
         SET_PWM = 0x91
     }
-    export enum RGB_LED_PIN {
+    export enum PCA9635_RGB_PIN {
         //% block="SMD LED 1"
         LED_SMD_1 = 0x01,
 
@@ -119,6 +119,24 @@ namespace iPort {
 
         //% block="THT LED 2"
         LED_2 = 0x04
+    }
+    export enum PCA9635_PIN {
+        LED_SMD_1_R = 0,
+        LED_SMD_1_G = 1,
+        LED_SMD_1_B = 2,
+        LED_SMD_2_R = 3,
+        LED_SMD_2_G = 4,
+        LED_SMD_2_B = 5,
+        LED_THT_1_R = 6,
+        LED_THT_1_G = 7,
+        LED_THT_1_B = 8,
+        LED_THT_2_R = 9,
+        LED_THT_2_G = 10,
+        LED_THT_2_B = 11,
+        COLOR_LED_1 = 12,
+        COLOR_LED_2 = 13,
+        LASER_1 = 14,
+        LASER_2 = 15
     }
 
     function print_error_screen(msg: string) {
@@ -417,7 +435,7 @@ namespace iPort {
     //% g.min=0 g.max=255 g.defl=128
     //% b.min=0 b.max=255 b.defl=128
     //% group="LED" blockGap=10
-    export function PCA9635_setRGB(address: number, pin: RGB_LED_PIN, r: number, g: number, b: number) {
+    export function PCA9635_setRGB(address: number, pin: PCA9635_RGB_PIN, r: number, g: number, b: number) {
         let cmd: number[] = [START_BYTE_SEND, 0xA, address, CMD_PCA9635, PCA9635.SET_RGB, pin, r, g, b]
         let checksum = getChecksum(cmd)
         cmd.push(checksum)
@@ -437,11 +455,31 @@ namespace iPort {
     //% address.min=0 address.max=20 address.defl=10
     //% color.shadow="colorNumberPicker"
     //% group="LED" blockGap=10
-    export function setHeadColor(address: number, pin: RGB_LED_PIN, color: number) {
+    export function setHeadColor(address: number, pin: PCA9635_RGB_PIN, color: number) {
         let r = color >> 16
         let g = (color & 0xFF00) >> 8
         let b = color & 0xFF
 
         PCA9635_setRGB(address, pin, r, g, b)
+    }
+
+    /**
+    * iPort set pwm
+    */
+    //% block="iPort #$address set LED $pin value $value"
+    //% address.min=0 address.max=20 address.defl=10
+    //% value.min=0 value.max=255 value.defl=128
+    //% group="LED" blockGap=10
+    function PCA9635_setPWM(address: number, pin: PCA9635_PIN, value: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x8, address, CMD_PCA9635, PCA9635.SET_PWM, pin, value]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(2000)
+
+        i2c_receive_0_byte(address, checksum, "0x91");
     }
 }
