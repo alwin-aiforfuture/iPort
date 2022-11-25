@@ -104,6 +104,13 @@ namespace iPort {
         SET_SIGNED_NUM = 0x64
     }
 
+    const CMD_DHT11 = 0x07
+    export enum DHT11{
+        UPDATE = 0x70,
+        TEMPERATURE = 0x71,
+        HUMIDITY = 0x72
+    }
+
     const CMD_PCA9635 = 0x09
     export enum PCA9635 {
         SET_RGB = 0x90,
@@ -537,10 +544,29 @@ namespace iPort {
 
         let cmd_buf = pins.createBufferFromArray(cmd)
         pins.i2cWriteBuffer(address, cmd_buf)
-        
+
         let buf = i2c_receive_4_byte(address, checksum, "0xB0")
         let count = (buf | 0xFFFF0000) >> 16
 
         return buf
+    }
+
+    /* DHT11 *************************************************************************************************************************/
+    //% blockId=DHT11_getTemp
+    //% block="iPort #$address get DHT11 temperature"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="Rotary encoder" blockGap=10
+    export function DHT11_getTemp(address: number) {
+        // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DHT11, DHT11.TEMPERATURE]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        return i2c_receive_1_byte(address, checksum, "0x71")
     }
 }
