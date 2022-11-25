@@ -443,7 +443,7 @@ namespace iPort {
         // let b = Math.round(((color) & 0xFF) * 4095 / 255)
 
         let r = color >> 16
-        let g = (color >> 8) & 0xFF
+        let g = (color & 0xFF00) >> 8
         let b = color & 0xFF
 
         sevenSegment_SetSignedNumber(address, r)
