@@ -470,7 +470,7 @@ namespace iPort {
     //% address.min=0 address.max=20 address.defl=10
     //% value.min=0 value.max=255 value.defl=128
     //% group="LED" blockGap=10
-    function PCA9635_setPWM(address: number, pin: PCA9635_PIN, value: number) {
+    export function PCA9635_setPWM(address: number, pin: PCA9635_PIN, value: number) {
         let cmd: number[] = [START_BYTE_SEND, 0x8, address, CMD_PCA9635, PCA9635.SET_PWM, pin, value]
         let checksum = getChecksum(cmd)
         cmd.push(checksum)
