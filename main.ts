@@ -187,8 +187,11 @@ namespace iPort {
 
     function print_error_screen(msg: string) {
 
-        // basic.showString(msg)
-        basic.pause(500)
+        basic.showString(msg)
+
+        control.reset()
+        // basic.pause(500)
+        
 
         // while (1) {
         //     basic.showString(msg)
