@@ -565,7 +565,7 @@ namespace iPort {
     //% block="iPort #$address update DHT11"
     //% address.min=0 address.max=20 address.defl=10
     //% group="DHT11" blockGap=10
-    function DHT11_update(address: number) {
+    export function DHT11_update(address: number) {
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DHT11, DHT11.UPDATE]
         let checksum = getChecksum(cmd)
         cmd.push(checksum)
