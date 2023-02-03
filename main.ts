@@ -663,7 +663,7 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         let i2c = i2c_receive_4_byte(address, checksum, "0x81")
-        basic.showString(convertToText(i2c))
+        // basic.showString(convertToText(i2c))
 
         return hex_to_float(i2c)
     }
