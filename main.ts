@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder", "DHT11"]'
+//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder", "Servo", "DHT11"]'
 
 namespace iPort {
     const DELAY = 50
