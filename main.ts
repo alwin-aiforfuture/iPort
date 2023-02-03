@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder", "Servo", "DHT11"]'
+//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder", "Servo", "DHT11", "DS18B20"]'
 
 namespace iPort {
     const DELAY = 50
@@ -109,6 +109,12 @@ namespace iPort {
         UPDATE = 0x70,
         TEMPERATURE = 0x71,
         HUMIDITY = 0x72
+    }
+
+    const CMD_DS18B20 = 0x07
+    export enum DS18B20 {
+        UPDATE = 0x70,
+        TEMPERATURE = 0x71,
     }
 
     const CMD_PCA9635 = 0x09
@@ -617,5 +623,59 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         return i2c_receive_1_byte(address, checksum, "0x72")
+    }
+    /* DS18B20 *************************************************************************************************************************/
+
+    /**
+    * iPort update DHT11 
+    */
+    function DS18B20_update(address: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DS18B20, DS18B20.UPDATE]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        i2c_receive_0_byte(address, checksum, "0x80");
+        basic.pause(255)
+    }
+
+    /**
+    * iPort get DS18B20 temperature
+    */
+    //% blockId=DS18B20_getTemp
+    //% block="iPort #$address get DS18B20 temperature"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="DS18B20" blockGap=10
+    export function DS18B20_getTemp(address: number) {
+        // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
+        DS18B20_update(address)
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_DS18B20, DS18B20.TEMPERATURE]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        return hex_to_float(i2c_receive_4_byte(address, checksum, "0x71"))
+    }
+
+    function hex_to_float(hex: number) {
+        let hex_sign = (hex >> 31) & 0x1
+        let exp = hex >> 23 & 0xff
+        let mantissa = hex & 0x7fffff
+
+        let mantissa_sum = 1
+        for (let i = 22; i >= 0; i--) {
+            mantissa_sum += ((mantissa >> i) & 0x1) * (2 ** (i - 23))
+        }
+
+        let sign = hex_sign == 0 ? 1 : -1
+        return sign * 2 ** (exp - 127) * mantissa_sum
     }
 }
