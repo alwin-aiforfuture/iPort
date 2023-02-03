@@ -736,7 +736,7 @@ namespace iPort {
     //% group="Ultrasonic" blockGap=10
     export function Ultrasonic_getDistance(address: number) {
         // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
-        Ultrasonic_update(address)
+        // Ultrasonic_update(address)
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
         let checksum = getChecksum(cmd)
         cmd.push(checksum)
