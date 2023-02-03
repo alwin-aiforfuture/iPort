@@ -268,6 +268,41 @@ namespace iPort {
         return value
     }
 
+    function i2c_receive_n_byte(address: number, checksum: number, error_code: string, len: number) {
+        let rec_cmd_len = 3 + len + 1;
+        let rec_cmd_buf = pins.i2cReadBuffer(address, rec_cmd_len, false)
+        let rec_cmd_array = rec_cmd_buf.toArray(NumberFormat.UInt8LE)
+        rec_cmd_array.pop()
+        let rec_checksum = getChecksum(rec_cmd_array)
+        if (rec_cmd_buf[0] != START_BYTE_RECEIVE ||
+            rec_cmd_buf[1] != rec_cmd_len ||
+            rec_cmd_buf[2] != checksum ||
+            rec_cmd_buf[rec_cmd_len - 1] != rec_checksum) {
+            print_error_screen(error_code)
+        }
+        let data_array = pins.createBuffer(rec_cmd_len)
+        for (let i = 0; i < len; i++) {
+            data_array[i] = rec_cmd_buf[3 + i]
+        }
+        return data_array
+    }
+
+    function hex_to_float(hex: number) {
+        let hex_sign = (hex >> 31) & 0x1
+        let exp = hex >> 23 & 0xff
+        let mantissa = hex & 0x7fffff
+
+        let mantissa_sum = 1
+        for (let i = 22; i >= 0; i--) {
+            mantissa_sum += ((mantissa >> i) & 0x1) * (2 ** (i - 23))
+        }
+
+        let sign = hex_sign == 0 ? 1 : -1
+        return sign * 2 ** (exp - 127) * mantissa_sum
+    }
+
+
+
     /* GPIO *************************************************************************************************************************/
     /**
      * iPort digitalWrite
@@ -662,23 +697,10 @@ namespace iPort {
         pins.i2cWriteBuffer(address, cmd_buf)
         control.waitMicros(DELAY)
 
-        let i2c = i2c_receive_4_byte(address, checksum, "0x81")
-        // basic.showString(convertToText(i2c))
-
-        return hex_to_float(i2c)
+        let i2c_buf = i2c_receive_n_byte(address, checksum, "0x81", 4)
+        let value = i2c_buf[0] << 24 | i2c_buf[1] << 16 | i2c_buf[2] << 8 | i2c_buf[3]
+        return hex_to_float(value)
     }
 
-    function hex_to_float(hex: number) {
-        let hex_sign = (hex >> 31) & 0x1
-        let exp = hex >> 23 & 0xff
-        let mantissa = hex & 0x7fffff
 
-        let mantissa_sum = 1
-        for (let i = 22; i >= 0; i--) {
-            mantissa_sum += ((mantissa >> i) & 0x1) * (2 ** (i - 23))
-        }
-
-        let sign = hex_sign == 0 ? 1 : -1
-        return sign * 2 ** (exp - 127) * mantissa_sum
-    }
 }
