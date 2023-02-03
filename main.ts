@@ -699,6 +699,9 @@ namespace iPort {
 
         let i2c_buf = i2c_receive_n_byte(address, checksum, "0x81", 4)
         let value = i2c_buf[0] << 24 | i2c_buf[1] << 16 | i2c_buf[2] << 8 | i2c_buf[3]
+        // serial.writeNumber(hex_to_float(value))
+        // serial.writeString('\n')
+
         return hex_to_float(value)
     }
 
