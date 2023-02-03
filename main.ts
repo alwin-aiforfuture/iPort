@@ -1,5 +1,5 @@
 //% color="#ffc619" weight=20 icon="\uf11b" block="iPort"
-//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder", "Servo", "DHT11", "DS18B20"]'
+//% groups='["GPIO", "7-seg dispaly", "LED", "Rotary encoder", "Servo", "DHT11", "DS18B20", "Ultrasonic"]'
 
 namespace iPort {
     const DELAY = 50
@@ -188,6 +188,12 @@ namespace iPort {
     const CMD_ROTARY_ENCODER = 0x0B
     export enum ROTARY_ENCODER {
         GET_COUNT = 0xB0
+    }
+
+    const CMD_ULTRASONIC = 0x0D
+    export enum ULTRASONIC {
+        UPDATE = 0xD0,
+        DISTANCE = 0xD1
     }
 
 
@@ -702,4 +708,48 @@ namespace iPort {
 
         return hex_to_float(value)
     }
+
+    /* Ultrasonic *************************************************************************************************************************/
+    /**
+    * iPort update Ultrasonic
+    */
+    function Ultrasonic_update(address: number) {
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        i2c_receive_0_byte(address, checksum, "0xD0");
+        basic.pause(75)
+    }
+
+    /**
+    * iPort get Ultrasonic distance
+    */
+    //% blockId=Ultrasonic_getDistance
+    //% block="iPort #$address get Ultrasonic distance"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="DHT11" blockGap=10
+    export function Ultrasonic_getDistance(address: number) {
+        // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
+        Ultrasonic_update(address)
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
+
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
+
+        let i2c_buf = i2c_receive_n_byte(address, checksum, "0xD1", 2)
+        let value = i2c_buf[0] << 8 | i2c_buf[1]
+        control.waitMicros(DELAY)
+        return value
+    }
+
 }
