@@ -662,7 +662,10 @@ namespace iPort {
         pins.i2cWriteBuffer(address, cmd_buf)
         control.waitMicros(DELAY)
 
-        return hex_to_float(i2c_receive_4_byte(address, checksum, "0x81"))
+        let i2c = i2c_receive_4_byte(address, checksum, "0x81")
+        basic.showString(convertToText(i2c))
+
+        return hex_to_float(i2c)
     }
 
     function hex_to_float(hex: number) {
