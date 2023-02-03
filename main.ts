@@ -733,7 +733,7 @@ namespace iPort {
     //% blockId=Ultrasonic_getDistance
     //% block="iPort #$address get Ultrasonic distance"
     //% address.min=0 address.max=20 address.defl=10
-    //% group="DHT11" blockGap=10
+    //% group="Ultrasonic" blockGap=10
     export function Ultrasonic_getDistance(address: number) {
         // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
         Ultrasonic_update(address)
