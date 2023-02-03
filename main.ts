@@ -694,15 +694,14 @@ namespace iPort {
         cmd = standardArrayLen(cmd)
 
         let cmd_buf = pins.createBufferFromArray(cmd)
-        pins.i2cWriteBuffer(address, cmd_buf)
-        control.waitMicros(DELAY)
+        // pins.i2cWriteBuffer(address, cmd_buf)
+        // control.waitMicros(DELAY)
 
-        let i2c_buf = i2c_receive_n_byte(address, checksum, "0x81", 4)
-        let value = i2c_buf[0] << 24 | i2c_buf[1] << 16 | i2c_buf[2] << 8 | i2c_buf[3]
-        // serial.writeNumber(hex_to_float(value))
-        // serial.writeString('\n')
+        // let i2c_buf = i2c_receive_n_byte(address, checksum, "0x81", 4)
+        // let value = i2c_buf[0] << 24 | i2c_buf[1] << 16 | i2c_buf[2] << 8 | i2c_buf[3]
 
-        return hex_to_float(value)
+        // return hex_to_float(value)
+        return 0
     }
 
 
