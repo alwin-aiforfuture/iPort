@@ -113,8 +113,8 @@ namespace iPort {
 
     const CMD_DS18B20 = 0x08
     export enum DS18B20 {
-        UPDATE = 0x70,
-        TEMPERATURE = 0x71,
+        UPDATE = 0x80,
+        TEMPERATURE = 0x81,
     }
 
     const CMD_PCA9635 = 0x09
