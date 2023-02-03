@@ -714,7 +714,7 @@ namespace iPort {
     * iPort update Ultrasonic
     */
     function Ultrasonic_update(address: number) {
-        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.UPDATE]
         let checksum = getChecksum(cmd)
         cmd.push(checksum)
         cmd = standardArrayLen(cmd)
