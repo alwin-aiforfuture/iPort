@@ -111,7 +111,7 @@ namespace iPort {
         HUMIDITY = 0x72
     }
 
-    const CMD_DS18B20 = 0x07
+    const CMD_DS18B20 = 0x08
     export enum DS18B20 {
         UPDATE = 0x70,
         TEMPERATURE = 0x71,
@@ -662,7 +662,7 @@ namespace iPort {
         pins.i2cWriteBuffer(address, cmd_buf)
         control.waitMicros(DELAY)
 
-        return hex_to_float(i2c_receive_4_byte(address, checksum, "0x71"))
+        return hex_to_float(i2c_receive_4_byte(address, checksum, "0x81"))
     }
 
     function hex_to_float(hex: number) {
