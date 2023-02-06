@@ -727,6 +727,31 @@ namespace iPort {
         basic.pause(255)
     }
 
+    /**
+    * iPort get Ultrasonic distance
+    */
+    //% blockId=Ultrasonic_getDistance
+    //% block="iPort #$address get Ultrasonic distance"
+    //% address.min=0 address.max=20 address.defl=10
+    //% group="Ultrasonic" blockGap=10
+    export function Ultrasonic_getTemp(address: number) {
+        // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
+        Ultrasonic_update(address)
+        // let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
+        // let checksum = getChecksum(cmd)
+        // cmd.push(checksum)
+        // cmd = standardArrayLen(cmd)
+
+        // let cmd_buf = pins.createBufferFromArray(cmd)
+        // pins.i2cWriteBuffer(address, cmd_buf)
+        // control.waitMicros(DELAY)
+
+        // let i2c_buf = i2c_receive_n_byte(address, checksum, "0xD1", 4)
+        // let value = i2c_buf[0] << 24 | i2c_buf[1] << 16 | i2c_buf[2] << 8 | i2c_buf[3]
+
+        // return hex_to_float(value)
+    }
+
 
     // /**
     // * iPort update Ultrasonic
