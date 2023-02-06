@@ -724,8 +724,7 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         i2c_receive_0_byte(address, checksum, "0xD0");
-        basic.showNumber(1)
-        basic.pause(3000)
+        basic.pause(255)
     }
 
     /**
