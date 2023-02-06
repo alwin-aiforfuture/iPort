@@ -724,7 +724,7 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         i2c_receive_0_byte(address, checksum, "0xD0");
-        basic.pause(255)
+        basic.pause(250)
     }
 
     /**
@@ -737,19 +737,19 @@ namespace iPort {
     export function Ultrasonic_getDistance(address: number) {
         // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
         Ultrasonic_update(address)
-        // let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
-        // let checksum = getChecksum(cmd)
-        // cmd.push(checksum)
-        // cmd = standardArrayLen(cmd)
+        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
+        let checksum = getChecksum(cmd)
+        cmd.push(checksum)
+        cmd = standardArrayLen(cmd)
 
-        // let cmd_buf = pins.createBufferFromArray(cmd)
-        // pins.i2cWriteBuffer(address, cmd_buf)
-        // control.waitMicros(DELAY)
+        let cmd_buf = pins.createBufferFromArray(cmd)
+        pins.i2cWriteBuffer(address, cmd_buf)
+        control.waitMicros(DELAY)
 
-        // let i2c_buf = i2c_receive_n_byte(address, checksum, "0xD1", 4)
-        // let value = i2c_buf[0] << 24 | i2c_buf[1] << 16 | i2c_buf[2] << 8 | i2c_buf[3]
+        let i2c_buf = i2c_receive_n_byte(address, checksum, "0xD1", 2)
+        let value = i2c_buf[0] << 8 | i2c_buf[1]
 
-        // return hex_to_float(value)
+        return value
     }
 
 
