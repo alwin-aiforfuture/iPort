@@ -711,7 +711,7 @@ namespace iPort {
 
     /* Ultrasonic *************************************************************************************************************************/
     /**
-    * iPort update Ultrasonic
+    * iPort update Ultrasonic 
     */
     function Ultrasonic_update(address: number) {
         let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.UPDATE]
@@ -724,32 +724,50 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         i2c_receive_0_byte(address, checksum, "0xD0");
-        basic.pause(500)
+        basic.pause(255)
     }
 
-    /**
-    * iPort get Ultrasonic distance
-    */
-    //% blockId=Ultrasonic_getDistance
-    //% block="iPort #$address get Ultrasonic distance"
-    //% address.min=0 address.max=20 address.defl=10
-    //% group="Ultrasonic" blockGap=10
-    export function Ultrasonic_getDistance(address: number) {
-        // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
-        // Ultrasonic_update(address)
-        let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
-        let checksum = getChecksum(cmd)
-        cmd.push(checksum)
-        cmd = standardArrayLen(cmd)
 
-        let cmd_buf = pins.createBufferFromArray(cmd)
-        pins.i2cWriteBuffer(address, cmd_buf)
-        control.waitMicros(DELAY)
+    // /**
+    // * iPort update Ultrasonic
+    // */
+    // function Ultrasonic_update(address: number) {
+    //     let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.UPDATE]
+    //     let checksum = getChecksum(cmd)
+    //     cmd.push(checksum)
+    //     cmd = standardArrayLen(cmd)
 
-        let i2c_buf = i2c_receive_n_byte(address, checksum, "0xD1", 2)
-        let value = i2c_buf[0] << 8 | i2c_buf[1]
-        control.waitMicros(DELAY)
-        return value
-    }
+    //     let cmd_buf = pins.createBufferFromArray(cmd)
+    //     pins.i2cWriteBuffer(address, cmd_buf)
+    //     control.waitMicros(DELAY)
+
+    //     i2c_receive_0_byte(address, checksum, "0xD0");
+    //     basic.pause(500)
+    // }
+
+    // /**
+    // * iPort get Ultrasonic distance
+    // */
+    // //% blockId=Ultrasonic_getDistance
+    // //% block="iPort #$address get Ultrasonic distance"
+    // //% address.min=0 address.max=20 address.defl=10
+    // //% group="Ultrasonic" blockGap=10
+    // export function Ultrasonic_getDistance(address: number) {
+    //     // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
+    //     // Ultrasonic_update(address)
+    //     let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
+    //     let checksum = getChecksum(cmd)
+    //     cmd.push(checksum)
+    //     cmd = standardArrayLen(cmd)
+
+    //     let cmd_buf = pins.createBufferFromArray(cmd)
+    //     pins.i2cWriteBuffer(address, cmd_buf)
+    //     control.waitMicros(DELAY)
+
+    //     let i2c_buf = i2c_receive_n_byte(address, checksum, "0xD1", 2)
+    //     let value = i2c_buf[0] << 8 | i2c_buf[1]
+    //     control.waitMicros(DELAY)
+    //     return value
+    // }
 
 }
