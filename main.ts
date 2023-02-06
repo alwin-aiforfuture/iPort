@@ -724,7 +724,7 @@ namespace iPort {
         control.waitMicros(DELAY)
 
         i2c_receive_0_byte(address, checksum, "0xD0");
-        basic.pause(255)
+        basic.pause(1000)
     }
 
     /**
@@ -734,7 +734,7 @@ namespace iPort {
     //% block="iPort #$address get Ultrasonic distance"
     //% address.min=0 address.max=20 address.defl=10
     //% group="Ultrasonic" blockGap=10
-    export function Ultrasonic_getTemp(address: number) {
+    export function Ultrasonic_getDistance(address: number) {
         // [Start byte, Command Length, Address, Opcode, Opcode, Checksum]
         Ultrasonic_update(address)
         // let cmd: number[] = [START_BYTE_SEND, 0x6, address, CMD_ULTRASONIC, ULTRASONIC.DISTANCE]
